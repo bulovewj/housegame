@@ -1,0 +1,36 @@
+.app-viewport {
+  width: 390px;
+  min-height: 844px;
+  max-width: 100vw;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-body);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-splash {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.app-title {
+  font-family: var(--font-pixel);
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.app-subtitle {
+  font-size: 14px;
+  color: var(--color-text-dim);
+  margin: 0;
+}

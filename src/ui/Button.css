@@ -1,0 +1,30 @@
+.ui-button {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 2px solid var(--color-border);
+  cursor: pointer;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.ui-button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.ui-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ui-button--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #0f2019;
+}
+
+.ui-button--secondary {
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+}
