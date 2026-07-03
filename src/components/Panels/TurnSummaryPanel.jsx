@@ -3,6 +3,8 @@ import Button from '../../ui/Button.jsx'
 import './TurnSummaryPanel.css'
 
 function TurnSummaryPanel({ day, summary, onClose }) {
+  const { interest, priceChangeTotal, rentIncome, rateChange, rateEvent } = summary
+
   return (
     <div className="turn-summary-overlay">
       <div className="turn-summary-panel">
@@ -10,24 +12,39 @@ function TurnSummaryPanel({ day, summary, onClose }) {
         <ul className="turn-summary-list">
           <li>
             <span>대출 이자</span>
-            <span>-{formatWon(summary.interest)}</span>
+            <span>-{formatWon(interest)}</span>
           </li>
           <li>
             <span>집값 변동</span>
             <span>
-              {summary.priceChangeTotal >= 0 ? '+' : ''}
-              {formatWon(summary.priceChangeTotal)}
+              {priceChangeTotal >= 0 ? '+' : ''}
+              {formatWon(priceChangeTotal)}
             </span>
           </li>
           <li>
             <span>월세 수입</span>
-            <span>+{formatWon(summary.rentIncome)}</span>
-          </li>
-          <li>
-            <span>이벤트</span>
-            <span>{summary.event ?? '없음'}</span>
+            <span>+{formatWon(rentIncome)}</span>
           </li>
         </ul>
+
+        {rateChange && (
+          <div className="turn-summary-note turn-summary-note--rate">
+            <p>
+              기준금리가 {rateChange.direction === 'up' ? '올랐어요' : '내렸어요'} (
+              {rateChange.title})
+            </p>
+            <p className="turn-summary-hint">금리가 오르면 이자가 늘어나요!</p>
+          </div>
+        )}
+
+        {rateEvent && (
+          <div className="turn-summary-note turn-summary-note--forecast">
+            <p className="turn-summary-forecast-title">📰 {rateEvent.title}</p>
+            <p>{rateEvent.description}</p>
+            <p className="turn-summary-hint">다음 턴에 기준금리가 어떻게 될까요?</p>
+          </div>
+        )}
+
         <Button onClick={onClose}>확인</Button>
       </div>
     </div>

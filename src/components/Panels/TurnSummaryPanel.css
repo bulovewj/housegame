@@ -46,3 +46,28 @@
   color: var(--color-text);
   font-weight: 700;
 }
+
+.turn-summary-note {
+  background: var(--color-surface-soft);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.turn-summary-note p {
+  margin: 0 0 4px;
+}
+
+.turn-summary-note p:last-child {
+  margin-bottom: 0;
+}
+
+.turn-summary-forecast-title {
+  font-weight: 700;
+}
+
+.turn-summary-hint {
+  color: var(--color-accent);
+  font-size: 12px;
+}

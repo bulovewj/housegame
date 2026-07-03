@@ -1,13 +1,35 @@
 // 턴 정산 로직 (작업지시서 §6 계산 규칙)
-// 정산 순서: 이자 → 집값 변동 → 월세 입금 → 이벤트
-import { PRICE_VOLATILITY_RANGE, RENT_YIELD_PER_TURN } from './balance.js'
+// 정산 순서: 금리 변동 반영 → 이자 → 집값 변동 → 월세 입금 → 다음 금리 이벤트 예고
+import {
+  PRICE_VOLATILITY_RANGE,
+  RENT_YIELD_PER_TURN,
+  INTEREST_RATE_STEP,
+  RATE_EVENT_INTERVAL,
+  RATE_MIN,
+  RATE_MAX,
+} from './balance.js'
+import { drawRateEvent } from './events.js'
 
 function randomInRange(min, max) {
   return min + Math.random() * (max - min)
 }
 
-function calcInterest(loan, interestRate) {
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
+export function calcInterest(loan, interestRate) {
   return Math.round(loan.principal * (interestRate / 12))
+}
+
+function applyPendingRateEvent(state) {
+  if (!state.pendingRateEvent) {
+    return { interestRate: state.interestRate, rateChange: null }
+  }
+  const { direction, title } = state.pendingRateEvent
+  const delta = direction === 'up' ? INTEREST_RATE_STEP : -INTEREST_RATE_STEP
+  const interestRate = clamp(state.interestRate + delta, RATE_MIN, RATE_MAX)
+  return { interestRate, rateChange: { direction, delta, title } }
 }
 
 function applyPriceChanges(properties) {
@@ -28,25 +50,24 @@ function calcRentIncome(properties) {
   )
 }
 
-// 이벤트 카드는 M10에서 구현 예정 (events.js). 지금은 항상 없음.
-function drawEvent() {
-  return null
-}
-
 export function advanceTurn(state) {
-  const interest = calcInterest(state.loan, state.interestRate)
+  const { interestRate, rateChange } = applyPendingRateEvent(state)
+  const interest = calcInterest(state.loan, interestRate)
   const { properties, priceChangeTotal } = applyPriceChanges(state.properties)
   const rentIncome = calcRentIncome(properties)
-  const event = drawEvent()
+  const nextDay = state.day + 1
+  const nextRateEvent = nextDay % RATE_EVENT_INTERVAL === 0 ? drawRateEvent() : null
 
   const nextState = {
     ...state,
-    day: state.day + 1,
+    day: nextDay,
     cash: state.cash - interest + rentIncome,
+    interestRate,
     properties,
+    pendingRateEvent: nextRateEvent,
   }
 
-  const summary = { interest, priceChangeTotal, rentIncome, event }
+  const summary = { interest, priceChangeTotal, rentIncome, rateChange, rateEvent: nextRateEvent }
 
   return { nextState, summary }
 }

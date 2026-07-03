@@ -8,5 +8,6 @@ export function createInitialState() {
     interestRate: INITIAL_INTEREST_RATE,
     properties: [], // 보유 건물
     loan: { principal: 0 }, // 대출 원금
+    pendingRateEvent: null, // 다음 턴에 반영될 금리 변동 이벤트
   }
 }

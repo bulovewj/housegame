@@ -4,6 +4,7 @@ import { LTV_RATIO } from '../../game/balance.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
 import Button from '../../ui/Button.jsx'
+import '../../ui/Panel.css'
 import './PurchasePanel.css'
 
 function PurchasePanel({ ownedIds, cash, onPurchase, onClose }) {

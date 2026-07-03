@@ -7,6 +7,7 @@ import Map from './components/Map/Map.jsx'
 import MenuBar from './components/Menu/MenuBar.jsx'
 import TurnSummaryPanel from './components/Panels/TurnSummaryPanel.jsx'
 import PurchasePanel from './components/Panels/PurchasePanel.jsx'
+import LoanPanel from './components/Panels/LoanPanel.jsx'
 import './App.css'
 
 function App() {
@@ -38,6 +39,14 @@ function App() {
     setActivePanel(null)
   }
 
+  function handleRepayLoan() {
+    setGame((prev) => ({
+      ...prev,
+      cash: prev.cash - prev.loan.principal,
+      loan: { ...prev.loan, principal: 0 },
+    }))
+  }
+
   return (
     <div className="app-viewport">
       <header className="app-topbar">
@@ -53,12 +62,21 @@ function App() {
         interestRate={game.interestRate}
       />
       <Map properties={game.properties} />
-      <MenuBar enabledKeys={['buy']} onSelect={setActivePanel} />
+      <MenuBar enabledKeys={['buy', 'loan']} onSelect={setActivePanel} />
       {activePanel === 'buy' && (
         <PurchasePanel
           ownedIds={game.properties.map((p) => p.id)}
           cash={game.cash}
           onPurchase={handlePurchase}
+          onClose={() => setActivePanel(null)}
+        />
+      )}
+      {activePanel === 'loan' && (
+        <LoanPanel
+          loan={game.loan}
+          interestRate={game.interestRate}
+          cash={game.cash}
+          onRepay={handleRepayLoan}
           onClose={() => setActivePanel(null)}
         />
       )}
