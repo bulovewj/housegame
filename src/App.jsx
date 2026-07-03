@@ -10,12 +10,19 @@ import PurchasePanel from './components/Panels/PurchasePanel.jsx'
 import LoanPanel from './components/Panels/LoanPanel.jsx'
 import SellPanel from './components/Panels/SellPanel.jsx'
 import WorkPanel from './components/Panels/WorkPanel.jsx'
+import { saveGame, loadGame } from './save/storage.js'
 import './App.css'
 
 function App() {
   const [game, setGame] = useState(createInitialState)
   const [turnSummary, setTurnSummary] = useState(null)
   const [activePanel, setActivePanel] = useState(null)
+  const [toast, setToast] = useState(null)
+
+  function showToast(message) {
+    setToast(message)
+    setTimeout(() => setToast(null), 1500)
+  }
 
   const netWorth =
     game.cash +
@@ -65,6 +72,21 @@ function App() {
     setGame((prev) => ({ ...prev, cash: prev.cash + reward, workedToday: true }))
   }
 
+  function handleSave() {
+    saveGame(game)
+    showToast('저장했어요!')
+  }
+
+  function handleLoad() {
+    const loaded = loadGame()
+    if (!loaded) {
+      showToast('저장된 게임이 없어요')
+      return
+    }
+    setGame(loaded)
+    showToast('불러왔어요!')
+  }
+
   const menuKeys = ['buy', 'sell', 'loan']
   if (!game.workedToday) menuKeys.push('work')
 
@@ -72,10 +94,23 @@ function App() {
     <div className="app-viewport">
       <header className="app-topbar">
         <h1 className="app-title">부동산 타이쿤</h1>
-        <button type="button" className="app-next-day-button" onClick={handleNextDay}>
-          다음날
-        </button>
+        <div className="app-topbar-actions">
+          <button type="button" className="app-topbar-button" onClick={handleSave}>
+            저장
+          </button>
+          <button type="button" className="app-topbar-button" onClick={handleLoad}>
+            불러오기
+          </button>
+          <button
+            type="button"
+            className="app-topbar-button app-topbar-button--accent"
+            onClick={handleNextDay}
+          >
+            다음날
+          </button>
+        </div>
       </header>
+      {toast && <div className="app-toast">{toast}</div>}
       <HUD
         cash={game.cash}
         netWorth={netWorth}
