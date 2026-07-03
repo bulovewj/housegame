@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { PROPERTY_LISTINGS } from '../../data/properties.js'
-import { LTV_RATIO, LOAN_STEP, ACQUISITION_TAX_RATE } from '../../game/balance.js'
-import { calcInterest, calcRent } from '../../game/engine.js'
+import {
+  LTV_RATIO,
+  LOAN_STEP,
+  ACQUISITION_TAX_RATE,
+  MAINTENANCE_INTERVAL,
+} from '../../game/balance.js'
+import { calcInterest, calcRent, calcMaintenance } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
 import Button from '../../ui/Button.jsx'
@@ -75,6 +80,10 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
             </p>
             <p className="property-price">{formatWon(price)}</p>
             <p className="property-rent">예상 월세 {formatWon(calcRent(price))}/턴</p>
+            <p className="property-maintenance">
+              수리·관리비 {formatWon(calcMaintenance({ ...selected, price }))}/
+              {MAINTENANCE_INTERVAL}턴
+            </p>
 
             <div className="ltv-box">
               <p>
@@ -84,6 +93,7 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
               <ConceptTooltip conceptKey={selected.conceptTag} />
               <ConceptTooltip conceptKey="RENT" />
               <ConceptTooltip conceptKey="ACQUISITION_TAX" />
+              <ConceptTooltip conceptKey="MAINTENANCE" />
             </div>
 
             <div className="loan-slider-box">

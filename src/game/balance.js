@@ -20,6 +20,21 @@ export const PRICE_VOLATILITY_RANGES = {
 
 export const RENT_YIELD_PER_TURN = 0.003 // 집값의 0.3%/턴
 
+// 컨디션 등급별 집값 변동 보정치(턴당). 컨디션 낮은 건물은 방치하면 값이 깎인다.
+export const CONDITION_PRICE_DRIFT = {
+  good: 0,
+  normal: 0,
+  bad: -0.005, // -0.5%p/턴 → 기대치가 마이너스로 떨어질 수 있음
+}
+
+// 수리비·관리비: 월세를 주는 집이므로 2턴마다 컨디션 등급별로 집값의 일정 비율 지출
+export const MAINTENANCE_INTERVAL = 2
+export const MAINTENANCE_RATES = {
+  good: 0.001, // 집값의 0.1%/회
+  normal: 0.002, // 0.2%/회
+  bad: 0.004, // 0.4%/회 — 낡은 집일수록 유지비가 비싸다
+}
+
 export const ACQUISITION_TAX_RATE = 0.02 // 취득세: 구매가의 2% (거래비용 학습 + 잦은 매매 억제)
 
 export const MINIGAME_REWARD_RANGE = { min: 500_000, max: 2_000_000 }

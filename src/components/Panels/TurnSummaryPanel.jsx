@@ -3,7 +3,8 @@ import Button from '../../ui/Button.jsx'
 import './TurnSummaryPanel.css'
 
 function TurnSummaryPanel({ day, summary, onClose }) {
-  const { interest, priceChangeTotal, rentIncome, rateChange, rateEvent, bailout } = summary
+  const { interest, priceChangeTotal, rentIncome, maintenance, rateChange, rateEvent, bailout } =
+    summary
 
   return (
     <div className="turn-summary-overlay">
@@ -25,6 +26,12 @@ function TurnSummaryPanel({ day, summary, onClose }) {
             <span>월세 수입</span>
             <span>+{formatWon(rentIncome)}</span>
           </li>
+          {maintenance > 0 && (
+            <li>
+              <span>수리·관리비</span>
+              <span>-{formatWon(maintenance)}</span>
+            </li>
+          )}
         </ul>
 
         {rateChange && (

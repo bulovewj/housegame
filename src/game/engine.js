@@ -1,8 +1,11 @@
 // 턴 정산 로직 (작업지시서 §6 계산 규칙)
-// 정산 순서: 금리 변동 반영 → 이자 → 집값 변동 → 월세 입금 → 다음 금리 이벤트 예고
+// 정산 순서: 금리 변동 반영 → 이자 → 집값 변동 → 월세 입금 → 수리·관리비 → 다음 금리 이벤트 예고
 import {
   PRICE_VOLATILITY_RANGES,
   RENT_YIELD_PER_TURN,
+  CONDITION_PRICE_DRIFT,
+  MAINTENANCE_INTERVAL,
+  MAINTENANCE_RATES,
   INTEREST_RATE_STEP,
   RATE_EVENT_INTERVAL,
   RATE_MIN,
@@ -15,9 +18,10 @@ function randomInRange(min, max) {
   return min + Math.random() * (max - min)
 }
 
-function rollPrice(price, volatility) {
+function rollPrice(price, volatility, conditionGrade) {
   const range = PRICE_VOLATILITY_RANGES[volatility] ?? PRICE_VOLATILITY_RANGES.medium
-  return Math.round(price * (1 + randomInRange(range.min, range.max)))
+  const drift = CONDITION_PRICE_DRIFT[conditionGrade] ?? 0
+  return Math.round(price * (1 + randomInRange(range.min, range.max) + drift))
 }
 
 function clamp(value, min, max) {
@@ -41,7 +45,7 @@ function applyPendingRateEvent(state) {
 function applyPriceChanges(properties) {
   let priceChangeTotal = 0
   const updated = properties.map((property) => {
-    const newPrice = rollPrice(property.price, property.volatility)
+    const newPrice = rollPrice(property.price, property.volatility, property.conditionGrade)
     priceChangeTotal += newPrice - property.price
     return { ...property, price: newPrice }
   })
@@ -54,7 +58,7 @@ function applyMarketChanges(market, ownedIds) {
   for (const listing of PROPERTY_LISTINGS) {
     if (ownedIds.includes(listing.id)) continue
     const current = updated[listing.id] ?? listing.price
-    updated[listing.id] = rollPrice(current, listing.volatility)
+    updated[listing.id] = rollPrice(current, listing.volatility, listing.conditionGrade)
   }
   return updated
 }
@@ -67,6 +71,16 @@ function calcRentIncome(properties) {
   return properties.reduce((sum, property) => sum + calcRent(property.price), 0)
 }
 
+// 건물별 수리·관리비 (MAINTENANCE_INTERVAL턴마다 부과)
+export function calcMaintenance(property) {
+  const rate = MAINTENANCE_RATES[property.conditionGrade] ?? MAINTENANCE_RATES.normal
+  return Math.round(property.price * rate)
+}
+
+function calcMaintenanceTotal(properties) {
+  return properties.reduce((sum, property) => sum + calcMaintenance(property), 0)
+}
+
 export function advanceTurn(state) {
   const { interestRate, rateChange } = applyPendingRateEvent(state)
   const interest = calcInterest(state.loan, interestRate)
@@ -77,9 +91,11 @@ export function advanceTurn(state) {
   )
   const rentIncome = calcRentIncome(properties)
   const nextDay = state.day + 1
+  const maintenance =
+    nextDay % MAINTENANCE_INTERVAL === 0 ? calcMaintenanceTotal(properties) : 0
   const nextRateEvent = nextDay % RATE_EVENT_INTERVAL === 0 ? drawRateEvent() : null
 
-  let cash = state.cash - interest + rentIncome
+  let cash = state.cash - interest + rentIncome - maintenance
   let bailout = 0
   if (cash < 0) {
     bailout = -cash
@@ -101,6 +117,7 @@ export function advanceTurn(state) {
     interest,
     priceChangeTotal,
     rentIncome,
+    maintenance,
     rateChange,
     rateEvent: nextRateEvent,
     bailout,
