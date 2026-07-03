@@ -13,9 +13,9 @@ export function createInitialState() {
     cash: STARTING_CASH,
     interestRate: INITIAL_INTEREST_RATE,
     properties: [], // 보유 건물
-    loan: { principal: 0 }, // 대출 원금
     pendingRateEvent: null, // 다음 턴에 반영될 금리 변동 이벤트
     workedToday: false, // 오늘 '일하기'를 이미 했는지
     market: createInitialMarket(), // 매물 id → 현재 시장 가격
+    season: { number: 1, rentEarned: 0, bailouts: 0, stars: 0, bestNetWorth: STARTING_CASH },
   }
 }

@@ -1,0 +1,6 @@
+.repair-setup { display:flex; flex-direction:column; gap:12px; }
+.repair-setup label { color:var(--color-text-dim); font-size:13px; }
+.repair-setup select,.repair-setup button { padding:10px; border:1px solid var(--color-border); border-radius:8px; }
+.repair-setup select { background:var(--color-surface-soft); color:var(--color-text); }
+.repair-setup button { background:var(--color-accent); color:white; font-weight:700; }
+.repair-setup button:disabled { opacity:.5; }

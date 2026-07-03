@@ -28,12 +28,17 @@
 
 .game-map-house {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 15%;
+  width: 72px;
   aspect-ratio: 1;
-  transform: translate(-50%, -50%);
   background: var(--color-cash);
   border: 2px solid var(--color-border);
   border-radius: 4px;
+  cursor: pointer;
 }
+.game-map-house span { position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%); width:90px; font-size:10px; color:var(--color-text); text-shadow:0 1px white; }
+.game-map-house--0 { top:18%; left:18%; }
+.game-map-house--1 { top:20%; right:18%; }
+.game-map-house--2 { top:50%; left:40%; }
+.game-map-house--3 { bottom:20%; left:15%; }
+.game-map-house--4 { bottom:18%; right:15%; }
+.game-map-empty { position:absolute; inset:0; display:grid; place-items:center; margin:0; color:#31592b; font-weight:700; }

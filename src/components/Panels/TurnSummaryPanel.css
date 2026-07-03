@@ -75,3 +75,5 @@
   color: var(--color-accent);
   font-size: 12px;
 }
+.decision-actions { display:flex; gap:8px; margin-top:8px; }
+.decision-actions button { flex:1; padding:8px; border:1px solid var(--color-border); border-radius:7px; background:var(--color-surface); color:var(--color-text); }

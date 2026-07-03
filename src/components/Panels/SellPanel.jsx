@@ -10,6 +10,8 @@ function SellPanel({ properties, onSell, onClose }) {
   const [selectedIndex, setSelectedIndex] = useState(null)
   const selected = selectedIndex !== null ? properties[selectedIndex] : null
   const profit = selected ? selected.price - selected.purchasePrice : 0
+  const remainingLoan = selected?.loanPrincipal ?? 0
+  const cashReceived = selected ? selected.price - remainingLoan : 0
 
   return (
     <div className="panel-overlay">
@@ -70,6 +72,14 @@ function SellPanel({ properties, onSell, onClose }) {
               <p>
                 <span>현재 시세</span>
                 <span className="sell-value">{formatWon(selected.price)}</span>
+              </p>
+              <p>
+                <span>남은 담보대출 상환</span>
+                <span className="sell-value">-{formatWon(remainingLoan)}</span>
+              </p>
+              <p>
+                <span>실제 수령액</span>
+                <span className="sell-value">{formatWon(cashReceived)}</span>
               </p>
               <p className="sell-profit">
                 <span>{profit >= 0 ? '시세차익' : '손실'}</span>

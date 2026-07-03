@@ -9,6 +9,8 @@ export const PROPERTY_LISTINGS = [
     price: 30_000_000,
     volatility: 'low',
     conceptTag: 'LTV',
+    regionTrait: '저렴한 매입가 · 높은 관리 부담',
+    regionDrift: -0.001,
   },
   {
     id: 'multi-house',
@@ -19,6 +21,8 @@ export const PROPERTY_LISTINGS = [
     price: 60_000_000,
     volatility: 'medium',
     conceptTag: 'LTV',
+    regionTrait: '안정적인 주거 수요',
+    regionDrift: 0,
   },
   {
     id: 'flawed-shophouse',
@@ -29,6 +33,8 @@ export const PROPERTY_LISTINGS = [
     price: 80_000_000,
     volatility: 'high',
     conceptTag: 'LTV',
+    regionTrait: '상권 호재 · 높은 변동성',
+    regionDrift: 0.001,
   },
   {
     id: 'new-villa',
@@ -39,6 +45,8 @@ export const PROPERTY_LISTINGS = [
     price: 120_000_000,
     volatility: 'medium',
     conceptTag: 'LTV',
+    regionTrait: '신축 선호 · 안정적 관리',
+    regionDrift: 0.0005,
   },
   {
     id: 'station-apartment',
@@ -49,5 +57,7 @@ export const PROPERTY_LISTINGS = [
     price: 150_000_000,
     volatility: 'high',
     conceptTag: 'LTV',
+    regionTrait: '교통 수요 · 높은 성장 가능성',
+    regionDrift: 0.0015,
   },
 ]

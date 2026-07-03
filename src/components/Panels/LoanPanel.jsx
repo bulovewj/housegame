@@ -1,12 +1,28 @@
-import { calcInterest } from '../../game/engine.js'
+import { useState } from 'react'
+import { calcInterest, calcTotalLoan } from '../../game/engine.js'
+import { LOAN_STEP } from '../../game/balance.js'
 import { formatWon } from '../../game/format.js'
 import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './LoanPanel.css'
 
-function LoanPanel({ loan, interestRate, cash, onRepay, onClose }) {
-  const nextInterest = calcInterest(loan, interestRate)
-  const canRepay = loan.principal > 0 && cash >= loan.principal
+function LoanPanel({ properties, interestRate, cash, onRepay, onClose }) {
+  const mortgaged = properties.filter((property) => (property.loanPrincipal ?? 0) > 0)
+  const [selectedId, setSelectedId] = useState(mortgaged[0]?.id ?? null)
+  const selected = mortgaged.find((property) => property.id === selectedId) ?? null
+  const maxRepayment = selected ? Math.min(selected.loanPrincipal, cash) : 0
+  const [repayment, setRepayment] = useState(
+    Math.min(LOAN_STEP, mortgaged[0]?.loanPrincipal ?? 0, cash),
+  )
+  const repaymentAmount = Math.min(repayment, maxRepayment)
+  const totalLoan = calcTotalLoan(properties)
+  const nextInterest = calcInterest(totalLoan, interestRate)
+
+  function handleRepay() {
+    if (!selected || repaymentAmount <= 0) return
+    onRepay(selected.id, repaymentAmount)
+    setRepayment(0)
+  }
 
   return (
     <div className="panel-overlay">
@@ -21,7 +37,7 @@ function LoanPanel({ loan, interestRate, cash, onRepay, onClose }) {
         <ul className="loan-info-list">
           <li>
             <span>대출 원금</span>
-            <span>{formatWon(loan.principal)}</span>
+            <span>{formatWon(totalLoan)}</span>
           </li>
           <li>
             <span>현재 기준금리</span>
@@ -33,11 +49,49 @@ function LoanPanel({ loan, interestRate, cash, onRepay, onClose }) {
           </li>
         </ul>
 
-        <p className="loan-hint">금리가 오르면 이자가 늘어요!</p>
+        <p className="loan-hint">대출은 담보로 잡힌 집마다 따로 관리돼요.</p>
 
-        <Button disabled={!canRepay} onClick={onRepay}>
-          {loan.principal === 0 ? '갚을 대출이 없어요' : '대출 전액 상환'}
-        </Button>
+        {mortgaged.length === 0 && <p className="loan-empty">갚을 대출이 없어요.</p>}
+        {mortgaged.length > 0 && (
+          <div className="loan-repayment">
+            <label htmlFor="loan-property">상환할 담보대출</label>
+            <select
+              id="loan-property"
+              value={selectedId ?? ''}
+              onChange={(event) => {
+                const property = mortgaged.find((item) => item.id === event.target.value)
+                setSelectedId(event.target.value)
+                setRepayment(Math.min(LOAN_STEP, property?.loanPrincipal ?? 0, cash))
+              }}
+            >
+              {mortgaged.map((property) => (
+                <option key={property.id} value={property.id}>
+                  {property.name} · {formatWon(property.loanPrincipal)}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="repayment-amount">
+              상환 금액 <strong>{formatWon(repaymentAmount)}</strong>
+            </label>
+            <input
+              id="repayment-amount"
+              type="range"
+              min={0}
+              max={maxRepayment}
+              step={LOAN_STEP}
+              value={repaymentAmount}
+              onChange={(event) => setRepayment(Number(event.target.value))}
+            />
+            <div className="loan-repayment-actions">
+              <button type="button" onClick={() => setRepayment(maxRepayment)}>
+                가능한 만큼 전액
+              </button>
+            </div>
+            <Button disabled={repaymentAmount <= 0} onClick={handleRepay}>
+              부분상환
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )

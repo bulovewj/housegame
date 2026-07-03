@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createInitialState, createInitialMarket } from './game/state.js'
-import { advanceTurn } from './game/engine.js'
-import { ACQUISITION_TAX_RATE } from './game/balance.js'
+import { advanceTurn, calcTotalLoan } from './game/engine.js'
+import { ACQUISITION_TAX_RATE, CONDITION_START } from './game/balance.js'
 import HUD from './components/HUD/HUD.jsx'
 import Map from './components/Map/Map.jsx'
 import MenuBar from './components/Menu/MenuBar.jsx'
@@ -11,7 +11,9 @@ import LoanPanel from './components/Panels/LoanPanel.jsx'
 import SellPanel from './components/Panels/SellPanel.jsx'
 import WorkPanel from './components/Panels/WorkPanel.jsx'
 import ConceptBookPanel from './components/Panels/ConceptBookPanel.jsx'
+import RepairPanel from './components/Panels/RepairPanel.jsx'
 import TutorialOverlay from './components/Tutorial/TutorialOverlay.jsx'
+import SeasonGoals from './components/HUD/SeasonGoals.jsx'
 import { saveGame, loadGame } from './save/storage.js'
 import './App.css'
 
@@ -22,6 +24,7 @@ function App() {
   const [turnSummary, setTurnSummary] = useState(null)
   const [activePanel, setActivePanel] = useState(null)
   const [toast, setToast] = useState(null)
+  const [repairTargetId, setRepairTargetId] = useState(null)
   const [showTutorial, setShowTutorial] = useState(
     () => localStorage.getItem(TUTORIAL_SEEN_KEY) !== 'true',
   )
@@ -34,7 +37,7 @@ function App() {
   const netWorth =
     game.cash +
     game.properties.reduce((sum, p) => sum + p.price, 0) -
-    game.loan.principal
+    calcTotalLoan(game.properties)
 
   function handleNextDay() {
     const { nextState, summary } = advanceTurn(game)
@@ -49,18 +52,31 @@ function App() {
     setGame((prev) => ({
       ...prev,
       cash: prev.cash - cashPaid,
-      loan: { ...prev.loan, principal: prev.loan.principal + loanAmount },
-      properties: [...prev.properties, { ...property, price, purchasePrice: price }],
+      properties: [
+        ...prev.properties,
+        {
+          ...property,
+          price,
+          purchasePrice: price,
+          loanPrincipal: loanAmount,
+          conditionScore: CONDITION_START[property.conditionGrade],
+        },
+      ],
     }))
     setActivePanel(null)
   }
 
-  function handleRepayLoan() {
+  function handleRepayLoan(propertyId, amount) {
     setGame((prev) => ({
       ...prev,
-      cash: prev.cash - prev.loan.principal,
-      loan: { ...prev.loan, principal: 0 },
+      cash: prev.cash - amount,
+      properties: prev.properties.map((property) =>
+        property.id === propertyId
+          ? { ...property, loanPrincipal: property.loanPrincipal - amount }
+          : property,
+      ),
     }))
+    setActivePanel(null)
   }
 
   function handleSell(index) {
@@ -68,7 +84,7 @@ function App() {
       const sold = prev.properties[index]
       return {
         ...prev,
-        cash: prev.cash + sold.price,
+        cash: prev.cash + sold.price - (sold.loanPrincipal ?? 0),
         properties: prev.properties.filter((_, i) => i !== index),
         // 판 건물은 판매가로 시장에 복귀 (원래 가격으로 되사는 차익 방지)
         market: { ...prev.market, [sold.id]: sold.price },
@@ -79,6 +95,29 @@ function App() {
 
   function handleWorkComplete(reward) {
     setGame((prev) => ({ ...prev, cash: prev.cash + reward, workedToday: true }))
+  }
+
+  function handleRepair(propertyId, cost, improvement) {
+    setGame((prev) => ({
+      ...prev,
+      cash: prev.cash - cost,
+      properties: prev.properties.map((property) => {
+        if (property.id !== propertyId) return property
+        const conditionScore = Math.min(100, (property.conditionScore ?? 60) + improvement)
+        const conditionGrade = conditionScore >= 75 ? 'good' : conditionScore >= 45 ? 'normal' : 'bad'
+        return { ...property, conditionScore, conditionGrade }
+      }),
+    }))
+    setActivePanel(null)
+  }
+
+  function handleDecision(event, choice) {
+    setGame((prev) => ({
+      ...prev,
+      cash: prev.cash - (choice === 'invest' ? event.cost : 0),
+      pendingDecision: { event, choice, dueDay: prev.day + 2 },
+    }))
+    setTurnSummary(null)
   }
 
   function handleSave() {
@@ -139,7 +178,8 @@ function App() {
         day={game.day}
         interestRate={game.interestRate}
       />
-      <Map properties={game.properties} />
+      <SeasonGoals season={game.season} netWorth={netWorth} day={game.day} />
+      <Map properties={game.properties} onManage={(id) => { setRepairTargetId(id); setActivePanel('repair') }} />
       <MenuBar enabledKeys={menuKeys} onSelect={setActivePanel} />
       {activePanel === 'buy' && (
         <PurchasePanel
@@ -160,7 +200,7 @@ function App() {
       )}
       {activePanel === 'loan' && (
         <LoanPanel
-          loan={game.loan}
+          properties={game.properties}
           interestRate={game.interestRate}
           cash={game.cash}
           onRepay={handleRepayLoan}
@@ -169,6 +209,15 @@ function App() {
       )}
       {activePanel === 'work' && (
         <WorkPanel onComplete={handleWorkComplete} onClose={() => setActivePanel(null)} />
+      )}
+      {activePanel === 'repair' && (
+        <RepairPanel
+          properties={game.properties}
+          cash={game.cash}
+          initialPropertyId={repairTargetId}
+          onRepair={handleRepair}
+          onClose={() => setActivePanel(null)}
+        />
       )}
       {activePanel === 'book' && (
         <ConceptBookPanel
@@ -184,6 +233,8 @@ function App() {
           day={game.day}
           summary={turnSummary}
           onClose={() => setTurnSummary(null)}
+          onDecision={handleDecision}
+          cash={game.cash}
         />
       )}
       {showTutorial && <TutorialOverlay onFinish={finishTutorial} />}

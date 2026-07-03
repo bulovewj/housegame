@@ -80,7 +80,7 @@ function RepairRhythmGame({ onComplete }) {
             {hits}/{TOTAL_ROUNDS}번 성공했어요!
           </p>
           <p className="minigame-reward">+{formatWon(reward)}</p>
-          <Button onClick={() => onComplete(reward)}>보상 받기</Button>
+          <Button onClick={() => onComplete(reward, { hits, total: TOTAL_ROUNDS })}>완료</Button>
         </>
       )}
     </div>

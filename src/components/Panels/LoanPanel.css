@@ -27,3 +27,41 @@
   font-size: 12px;
   color: var(--color-accent);
 }
+
+.loan-empty {
+  margin: 8px 0 0;
+  text-align: center;
+  color: var(--color-text-dim);
+}
+
+.loan-repayment {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loan-repayment label {
+  font-size: 13px;
+  color: var(--color-text-dim);
+}
+
+.loan-repayment select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-soft);
+  color: var(--color-text);
+}
+
+.loan-repayment-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.loan-repayment-actions button {
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+}
