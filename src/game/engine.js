@@ -67,6 +67,7 @@ export function advanceTurn(state) {
     interestRate,
     properties,
     pendingRateEvent: nextRateEvent,
+    workedToday: false,
   }
 
   const summary = { interest, priceChangeTotal, rentIncome, rateChange, rateEvent: nextRateEvent }

@@ -9,6 +9,7 @@ import TurnSummaryPanel from './components/Panels/TurnSummaryPanel.jsx'
 import PurchasePanel from './components/Panels/PurchasePanel.jsx'
 import LoanPanel from './components/Panels/LoanPanel.jsx'
 import SellPanel from './components/Panels/SellPanel.jsx'
+import WorkPanel from './components/Panels/WorkPanel.jsx'
 import './App.css'
 
 function App() {
@@ -60,6 +61,13 @@ function App() {
     setActivePanel(null)
   }
 
+  function handleWorkComplete(reward) {
+    setGame((prev) => ({ ...prev, cash: prev.cash + reward, workedToday: true }))
+  }
+
+  const menuKeys = ['buy', 'sell', 'loan']
+  if (!game.workedToday) menuKeys.push('work')
+
   return (
     <div className="app-viewport">
       <header className="app-topbar">
@@ -75,7 +83,7 @@ function App() {
         interestRate={game.interestRate}
       />
       <Map properties={game.properties} />
-      <MenuBar enabledKeys={['buy', 'sell', 'loan']} onSelect={setActivePanel} />
+      <MenuBar enabledKeys={menuKeys} onSelect={setActivePanel} />
       {activePanel === 'buy' && (
         <PurchasePanel
           ownedIds={game.properties.map((p) => p.id)}
@@ -99,6 +107,9 @@ function App() {
           onRepay={handleRepayLoan}
           onClose={() => setActivePanel(null)}
         />
+      )}
+      {activePanel === 'work' && (
+        <WorkPanel onComplete={handleWorkComplete} onClose={() => setActivePanel(null)} />
       )}
       {turnSummary && (
         <TurnSummaryPanel

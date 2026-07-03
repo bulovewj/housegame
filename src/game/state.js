@@ -9,5 +9,6 @@ export function createInitialState() {
     properties: [], // 보유 건물
     loan: { principal: 0 }, // 대출 원금
     pendingRateEvent: null, // 다음 턴에 반영될 금리 변동 이벤트
+    workedToday: false, // 오늘 '일하기'를 이미 했는지
   }
 }
