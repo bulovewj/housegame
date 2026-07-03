@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { createInitialState } from './game/state.js'
+import { createInitialState, createInitialMarket } from './game/state.js'
 import { advanceTurn } from './game/engine.js'
-import { LTV_RATIO } from './game/balance.js'
+import { ACQUISITION_TAX_RATE } from './game/balance.js'
 import HUD from './components/HUD/HUD.jsx'
 import Map from './components/Map/Map.jsx'
 import MenuBar from './components/Menu/MenuBar.jsx'
@@ -42,15 +42,15 @@ function App() {
     setTurnSummary(summary)
   }
 
-  function handlePurchase(property, method) {
-    const loanAmount = method === 'loan' ? Math.round(property.price * LTV_RATIO) : 0
-    const cashPaid = property.price - loanAmount
+  function handlePurchase(property, price, loanAmount) {
+    const tax = Math.round(price * ACQUISITION_TAX_RATE)
+    const cashPaid = price - loanAmount + tax
 
     setGame((prev) => ({
       ...prev,
       cash: prev.cash - cashPaid,
       loan: { ...prev.loan, principal: prev.loan.principal + loanAmount },
-      properties: [...prev.properties, { ...property, purchasePrice: property.price }],
+      properties: [...prev.properties, { ...property, price, purchasePrice: price }],
     }))
     setActivePanel(null)
   }
@@ -70,6 +70,8 @@ function App() {
         ...prev,
         cash: prev.cash + sold.price,
         properties: prev.properties.filter((_, i) => i !== index),
+        // 판 건물은 판매가로 시장에 복귀 (원래 가격으로 되사는 차익 방지)
+        market: { ...prev.market, [sold.id]: sold.price },
       }
     })
     setActivePanel(null)
@@ -90,7 +92,8 @@ function App() {
       showToast('저장된 게임이 없어요')
       return
     }
-    setGame(loaded)
+    // 시장가 도입 전 저장본 호환
+    setGame({ ...loaded, market: loaded.market ?? createInitialMarket() })
     showToast('불러왔어요!')
   }
 
@@ -142,6 +145,8 @@ function App() {
         <PurchasePanel
           ownedIds={game.properties.map((p) => p.id)}
           cash={game.cash}
+          market={game.market}
+          interestRate={game.interestRate}
           onPurchase={handlePurchase}
           onClose={() => setActivePanel(null)}
         />

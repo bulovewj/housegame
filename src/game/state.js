@@ -1,5 +1,11 @@
 // 게임 상태 정의 (작업지시서 §5.1)
 import { STARTING_CASH, INITIAL_INTEREST_RATE } from './balance.js'
+import { PROPERTY_LISTINGS } from '../data/properties.js'
+
+// 매물 시장가: 보유하지 않은 매물도 매턴 가격이 변동한다
+export function createInitialMarket() {
+  return Object.fromEntries(PROPERTY_LISTINGS.map((p) => [p.id, p.price]))
+}
 
 export function createInitialState() {
   return {
@@ -10,5 +16,6 @@ export function createInitialState() {
     loan: { principal: 0 }, // 대출 원금
     pendingRateEvent: null, // 다음 턴에 반영될 금리 변동 이벤트
     workedToday: false, // 오늘 '일하기'를 이미 했는지
+    market: createInitialMarket(), // 매물 id → 현재 시장 가격
   }
 }

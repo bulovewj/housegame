@@ -24,4 +24,12 @@ export const CONCEPTS = {
       '보통 집값이 비쌀수록 받을 수 있는 월세도 늘어나요.',
     source: '부동산_압축.pdf Ch.9',
   },
+  ACQUISITION_TAX: {
+    key: 'ACQUISITION_TAX',
+    title: '집을 살 때 내는 세금, 취득세',
+    kidText:
+      '집을 살 때는 집값만 내는 게 아니에요. 나라에 취득세라는 세금을 함께 내야 해요. ' +
+      '그래서 집을 자주 사고팔면 그만큼 세금이 계속 나가요. 살 때는 세금까지 생각해서 신중하게 골라야 해요.',
+    source: '부동산_압축.pdf Ch.9',
+  },
 }

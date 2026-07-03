@@ -9,9 +9,15 @@ import {
   RATE_MAX,
 } from './balance.js'
 import { drawRateEvent } from './events.js'
+import { PROPERTY_LISTINGS } from '../data/properties.js'
 
 function randomInRange(min, max) {
   return min + Math.random() * (max - min)
+}
+
+function rollPrice(price, volatility) {
+  const range = PRICE_VOLATILITY_RANGES[volatility] ?? PRICE_VOLATILITY_RANGES.medium
+  return Math.round(price * (1 + randomInRange(range.min, range.max)))
 }
 
 function clamp(value, min, max) {
@@ -35,13 +41,22 @@ function applyPendingRateEvent(state) {
 function applyPriceChanges(properties) {
   let priceChangeTotal = 0
   const updated = properties.map((property) => {
-    const range = PRICE_VOLATILITY_RANGES[property.volatility] ?? PRICE_VOLATILITY_RANGES.medium
-    const rate = randomInRange(range.min, range.max)
-    const newPrice = Math.round(property.price * (1 + rate))
+    const newPrice = rollPrice(property.price, property.volatility)
     priceChangeTotal += newPrice - property.price
     return { ...property, price: newPrice }
   })
   return { properties: updated, priceChangeTotal }
+}
+
+// 보유하지 않은 매물의 시장 가격도 매턴 변동 (판매→원가 재구매 차익 방지)
+function applyMarketChanges(market, ownedIds) {
+  const updated = { ...market }
+  for (const listing of PROPERTY_LISTINGS) {
+    if (ownedIds.includes(listing.id)) continue
+    const current = updated[listing.id] ?? listing.price
+    updated[listing.id] = rollPrice(current, listing.volatility)
+  }
+  return updated
 }
 
 export function calcRent(price) {
@@ -56,6 +71,10 @@ export function advanceTurn(state) {
   const { interestRate, rateChange } = applyPendingRateEvent(state)
   const interest = calcInterest(state.loan, interestRate)
   const { properties, priceChangeTotal } = applyPriceChanges(state.properties)
+  const market = applyMarketChanges(
+    state.market ?? {},
+    properties.map((p) => p.id),
+  )
   const rentIncome = calcRentIncome(properties)
   const nextDay = state.day + 1
   const nextRateEvent = nextDay % RATE_EVENT_INTERVAL === 0 ? drawRateEvent() : null
@@ -73,6 +92,7 @@ export function advanceTurn(state) {
     cash,
     interestRate,
     properties,
+    market,
     pendingRateEvent: nextRateEvent,
     workedToday: false,
   }
