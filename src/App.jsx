@@ -12,6 +12,7 @@ import SellPanel from './components/Panels/SellPanel.jsx'
 import WorkPanel from './components/Panels/WorkPanel.jsx'
 import ConceptBookPanel from './components/Panels/ConceptBookPanel.jsx'
 import RepairPanel from './components/Panels/RepairPanel.jsx'
+import PropertyDetailPanel from './components/Panels/PropertyDetailPanel.jsx'
 import TutorialOverlay from './components/Tutorial/TutorialOverlay.jsx'
 import SeasonGoals from './components/HUD/SeasonGoals.jsx'
 import { saveGame, loadGame } from './save/storage.js'
@@ -24,7 +25,7 @@ function App() {
   const [turnSummary, setTurnSummary] = useState(null)
   const [activePanel, setActivePanel] = useState(null)
   const [toast, setToast] = useState(null)
-  const [repairTargetId, setRepairTargetId] = useState(null)
+  const [targetPropertyId, setTargetPropertyId] = useState(null)
   const [showTutorial, setShowTutorial] = useState(
     () => localStorage.getItem(TUTORIAL_SEEN_KEY) !== 'true',
   )
@@ -179,8 +180,20 @@ function App() {
         interestRate={game.interestRate}
       />
       <SeasonGoals season={game.season} netWorth={netWorth} day={game.day} />
-      <Map properties={game.properties} onManage={(id) => { setRepairTargetId(id); setActivePanel('repair') }} />
-      <MenuBar enabledKeys={menuKeys} onSelect={setActivePanel} />
+      <Map
+        properties={game.properties}
+        onManage={(id) => {
+          setTargetPropertyId(id)
+          setActivePanel('detail')
+        }}
+      />
+      <MenuBar
+        enabledKeys={menuKeys}
+        onSelect={(key) => {
+          setTargetPropertyId(null)
+          setActivePanel(key)
+        }}
+      />
       {activePanel === 'buy' && (
         <PurchasePanel
           ownedIds={game.properties.map((p) => p.id)}
@@ -194,6 +207,7 @@ function App() {
       {activePanel === 'sell' && (
         <SellPanel
           properties={game.properties}
+          initialPropertyId={targetPropertyId}
           onSell={handleSell}
           onClose={() => setActivePanel(null)}
         />
@@ -203,6 +217,7 @@ function App() {
           properties={game.properties}
           interestRate={game.interestRate}
           cash={game.cash}
+          initialPropertyId={targetPropertyId}
           onRepay={handleRepayLoan}
           onClose={() => setActivePanel(null)}
         />
@@ -214,8 +229,17 @@ function App() {
         <RepairPanel
           properties={game.properties}
           cash={game.cash}
-          initialPropertyId={repairTargetId}
+          initialPropertyId={targetPropertyId}
           onRepair={handleRepair}
+          onClose={() => setActivePanel(null)}
+        />
+      )}
+      {activePanel === 'detail' && (
+        <PropertyDetailPanel
+          property={game.properties.find((p) => p.id === targetPropertyId)}
+          onRepair={() => setActivePanel('repair')}
+          onRepay={() => setActivePanel('loan')}
+          onSell={() => setActivePanel('sell')}
           onClose={() => setActivePanel(null)}
         />
       )}

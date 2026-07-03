@@ -6,8 +6,11 @@ import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './SellPanel.css'
 
-function SellPanel({ properties, onSell, onClose }) {
-  const [selectedIndex, setSelectedIndex] = useState(null)
+function SellPanel({ properties, initialPropertyId, onSell, onClose }) {
+  const initialIndex = properties.findIndex((property) => property.id === initialPropertyId)
+  const [selectedIndex, setSelectedIndex] = useState(
+    initialIndex >= 0 ? initialIndex : null,
+  )
   const selected = selectedIndex !== null ? properties[selectedIndex] : null
   const profit = selected ? selected.price - selected.purchasePrice : 0
   const remainingLoan = selected?.loanPrincipal ?? 0

@@ -6,13 +6,15 @@ import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './LoanPanel.css'
 
-function LoanPanel({ properties, interestRate, cash, onRepay, onClose }) {
+function LoanPanel({ properties, interestRate, cash, initialPropertyId, onRepay, onClose }) {
   const mortgaged = properties.filter((property) => (property.loanPrincipal ?? 0) > 0)
-  const [selectedId, setSelectedId] = useState(mortgaged[0]?.id ?? null)
+  const initialSelected =
+    mortgaged.find((property) => property.id === initialPropertyId) ?? mortgaged[0] ?? null
+  const [selectedId, setSelectedId] = useState(initialSelected?.id ?? null)
   const selected = mortgaged.find((property) => property.id === selectedId) ?? null
   const maxRepayment = selected ? Math.min(selected.loanPrincipal, cash) : 0
   const [repayment, setRepayment] = useState(
-    Math.min(LOAN_STEP, mortgaged[0]?.loanPrincipal ?? 0, cash),
+    Math.min(LOAN_STEP, initialSelected?.loanPrincipal ?? 0, cash),
   )
   const repaymentAmount = Math.min(repayment, maxRepayment)
   const totalLoan = calcTotalLoan(properties)
