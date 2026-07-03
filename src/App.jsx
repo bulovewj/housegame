@@ -8,6 +8,7 @@ import MenuBar from './components/Menu/MenuBar.jsx'
 import TurnSummaryPanel from './components/Panels/TurnSummaryPanel.jsx'
 import PurchasePanel from './components/Panels/PurchasePanel.jsx'
 import LoanPanel from './components/Panels/LoanPanel.jsx'
+import SellPanel from './components/Panels/SellPanel.jsx'
 import './App.css'
 
 function App() {
@@ -47,6 +48,18 @@ function App() {
     }))
   }
 
+  function handleSell(index) {
+    setGame((prev) => {
+      const sold = prev.properties[index]
+      return {
+        ...prev,
+        cash: prev.cash + sold.price,
+        properties: prev.properties.filter((_, i) => i !== index),
+      }
+    })
+    setActivePanel(null)
+  }
+
   return (
     <div className="app-viewport">
       <header className="app-topbar">
@@ -62,12 +75,19 @@ function App() {
         interestRate={game.interestRate}
       />
       <Map properties={game.properties} />
-      <MenuBar enabledKeys={['buy', 'loan']} onSelect={setActivePanel} />
+      <MenuBar enabledKeys={['buy', 'sell', 'loan']} onSelect={setActivePanel} />
       {activePanel === 'buy' && (
         <PurchasePanel
           ownedIds={game.properties.map((p) => p.id)}
           cash={game.cash}
           onPurchase={handlePurchase}
+          onClose={() => setActivePanel(null)}
+        />
+      )}
+      {activePanel === 'sell' && (
+        <SellPanel
+          properties={game.properties}
+          onSell={handleSell}
           onClose={() => setActivePanel(null)}
         />
       )}

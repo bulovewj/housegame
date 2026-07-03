@@ -10,7 +10,12 @@ export const RATE_EVENT_INTERVAL = 3 // 3턴마다 경제 상황 이벤트 → �
 export const RATE_MIN = 0.01
 export const RATE_MAX = 0.1
 
-export const PRICE_VOLATILITY_RANGE = { min: -0.03, max: 0.05 } // 입지별 -3%~+5%/턴
+// 입지·컨디션 등급(volatility)별 턴당 집값 변동 범위
+export const PRICE_VOLATILITY_RANGES = {
+  low: { min: -0.01, max: 0.02 }, // 안정적 (예: 낡은 원룸)
+  medium: { min: -0.03, max: 0.05 }, // 기본 (예: 다세대주택, 신축 빌라)
+  high: { min: -0.05, max: 0.08 }, // 변동 큼 (예: 하자있는 상가주택, 역세권 아파트)
+}
 
 export const RENT_YIELD_PER_TURN = 0.003 // 집값의 0.3%/턴
 
