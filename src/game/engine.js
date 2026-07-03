@@ -99,13 +99,16 @@ export function advanceTurn(state) {
       const success = Math.random() < event.probability
       const rate = success ? event.successRate : event.failureRate
       let eventChange = 0
+      let matchedCount = 0
       properties = properties.map((property) => {
+        if (!matchesEventScope(event, property)) return property
+        matchedCount += 1
         const price = Math.round(property.price * (1 + rate))
         eventChange += price - property.price
         return { ...property, price }
       })
       priceChangeTotal += eventChange
-      decisionResult = { title: event.title, success, change: eventChange }
+      decisionResult = { title: event.title, success, change: eventChange, matchedCount }
     } else {
       decisionResult = { title: event.title, skipped: true, change: 0 }
     }
@@ -180,6 +183,14 @@ export function advanceTurn(state) {
 
 function nextTurnDay(state) {
   return state.day + 1
+}
+
+function matchesEventScope(event, property) {
+  if (event.targetLocations && !event.targetLocations.includes(property.location)) return false
+  if (event.targetConditionGrades && !event.targetConditionGrades.includes(property.conditionGrade)) {
+    return false
+  }
+  return true
 }
 
 function propertiesInterest(properties, interestRate) {

@@ -66,14 +66,27 @@ function TurnSummaryPanel({ day, summary, onClose, onDecision, cash }) {
         )}
         {summary.decisionResult && (
           <div className="turn-summary-note turn-summary-note--rate">
-            <p>{summary.decisionResult.skipped ? '기회를 지켜봤어요.' : summary.decisionResult.success ? '투자가 성공했어요!' : '예상과 달리 개발이 무산됐어요.'}</p>
-            {!summary.decisionResult.skipped && <p>자산가치 변화 {summary.decisionResult.change >= 0 ? '+' : ''}{formatWon(summary.decisionResult.change)}</p>}
+            <p>
+              {summary.decisionResult.skipped
+                ? '기회를 지켜봤어요.'
+                : summary.decisionResult.matchedCount === 0
+                  ? '해당 조건에 맞는 건물이 없어서 효과가 없었어요.'
+                  : summary.decisionResult.success
+                    ? '투자가 성공했어요!'
+                    : '예상과 달리 결과가 좋지 않았어요.'}
+            </p>
+            {!summary.decisionResult.skipped && summary.decisionResult.matchedCount > 0 && (
+              <p>자산가치 변화 {summary.decisionResult.change >= 0 ? '+' : ''}{formatWon(summary.decisionResult.change)}</p>
+            )}
           </div>
         )}
         {summary.decisionEvent && (
           <div className="turn-summary-note turn-summary-note--forecast">
             <p className="turn-summary-forecast-title">🗞️ {summary.decisionEvent.title}</p>
             <p>{summary.decisionEvent.description}</p>
+            {summary.decisionEvent.scopeLabel && (
+              <p className="turn-summary-hint">{summary.decisionEvent.scopeLabel}</p>
+            )}
             <div className="decision-actions">
               <button type="button" disabled={cash < summary.decisionEvent.cost} onClick={() => onDecision(summary.decisionEvent, 'invest')}>{cash < summary.decisionEvent.cost ? '현금 부족' : `${formatWon(summary.decisionEvent.cost)} 투자`}</button>
               <button type="button" onClick={() => onDecision(summary.decisionEvent, 'skip')}>현금 보유</button>

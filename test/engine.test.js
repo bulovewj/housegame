@@ -21,6 +21,34 @@ test('월세는 현재 시세의 0.3%다', () => {
   assert.equal(calcRent(100_000_000), 300_000)
 })
 
+test('선택형 이벤트는 조건에 맞는 건물에만 영향을 준다', () => {
+  const originalRandom = Math.random
+  Math.random = () => 0 // 항상 성공(성공률 적용)
+  try {
+    const event = {
+      title: '테스트 이벤트',
+      probability: 1,
+      cost: 0,
+      successRate: 0.1,
+      failureRate: -0.1,
+      targetLocations: ['좋음'],
+    }
+    const state = {
+      ...createInitialState(),
+      day: 1,
+      pendingDecision: { event, choice: 'invest', dueDay: 2 },
+      properties: [
+        { id: 'a', price: 100_000_000, volatility: 'low', conditionGrade: 'normal', location: '좋음' },
+        { id: 'b', price: 100_000_000, volatility: 'low', conditionGrade: 'normal', location: '변두리' },
+      ],
+    }
+    const { summary } = advanceTurn(state)
+    assert.equal(summary.decisionResult.matchedCount, 1)
+  } finally {
+    Math.random = originalRandom
+  }
+})
+
 test('현금 부족 시 구제금으로 0 아래로 내려가지 않는다', () => {
   const originalRandom = Math.random
   Math.random = () => 0.5
