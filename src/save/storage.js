@@ -17,7 +17,7 @@ export function loadGame() {
   }
 }
 
-function migrateSave(state) {
+export function migrateSave(state) {
   if (!state || !Array.isArray(state.properties)) return null
   if (state.saveVersion >= SAVE_VERSION) {
     return {
