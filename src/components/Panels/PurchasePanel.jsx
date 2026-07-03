@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PROPERTY_LISTINGS } from '../../data/properties.js'
 import { LTV_RATIO } from '../../game/balance.js'
+import { calcRent } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
 import Button from '../../ui/Button.jsx'
@@ -40,6 +41,7 @@ function PurchasePanel({ ownedIds, cash, onPurchase, onClose }) {
                     {p.location} · {p.condition}
                   </span>
                   <span className="property-price">{formatWon(p.price)}</span>
+                  <span className="property-rent">월세 {formatWon(calcRent(p.price))}/턴</span>
                 </button>
               </li>
             ))}
@@ -57,6 +59,9 @@ function PurchasePanel({ ownedIds, cash, onPurchase, onClose }) {
               {selected.location} · {selected.condition}
             </p>
             <p className="property-price">{formatWon(selected.price)}</p>
+            <p className="property-rent">
+              예상 월세 {formatWon(calcRent(selected.price))}/턴
+            </p>
 
             <div className="ltv-box">
               <p>
@@ -65,6 +70,7 @@ function PurchasePanel({ ownedIds, cash, onPurchase, onClose }) {
               </p>
               <p>대출 시 필요한 내 돈(자기자본): {formatWon(downPayment)}</p>
               <ConceptTooltip conceptKey={selected.conceptTag} />
+              <ConceptTooltip conceptKey="RENT" />
             </div>
 
             <div className="property-actions">

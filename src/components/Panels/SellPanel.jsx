@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { calcRent } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
 import Button from '../../ui/Button.jsx'
@@ -34,6 +35,7 @@ function SellPanel({ properties, onSell, onClose }) {
                     {p.location} · {p.condition}
                   </span>
                   <span className="property-price">{formatWon(p.price)}</span>
+                  <span className="property-rent">월세 {formatWon(calcRent(p.price))}/턴</span>
                 </button>
               </li>
             ))}
@@ -55,6 +57,9 @@ function SellPanel({ properties, onSell, onClose }) {
             <h3>{selected.name}</h3>
             <p className="property-meta">
               {selected.location} · {selected.condition}
+            </p>
+            <p className="property-rent">
+              현재 월세 {formatWon(calcRent(selected.price))}/턴
             </p>
 
             <div className="sell-compare">

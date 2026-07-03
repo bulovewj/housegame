@@ -44,11 +44,12 @@ function applyPriceChanges(properties) {
   return { properties: updated, priceChangeTotal }
 }
 
+export function calcRent(price) {
+  return Math.round(price * RENT_YIELD_PER_TURN)
+}
+
 function calcRentIncome(properties) {
-  return properties.reduce(
-    (sum, property) => sum + Math.round(property.price * RENT_YIELD_PER_TURN),
-    0,
-  )
+  return properties.reduce((sum, property) => sum + calcRent(property.price), 0)
 }
 
 export function advanceTurn(state) {

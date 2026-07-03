@@ -87,6 +87,11 @@
   color: var(--color-cash);
 }
 
+.property-rent {
+  font-size: 11px;
+  color: var(--color-accent);
+}
+
 .property-back {
   align-self: flex-start;
   background: none;
