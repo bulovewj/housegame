@@ -15,5 +15,14 @@
   border: 2px solid var(--color-border);
   background: var(--color-surface-soft);
   color: var(--color-text);
+  cursor: pointer;
+}
+
+.menu-bar-button:disabled {
   opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-bar-button:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
 }

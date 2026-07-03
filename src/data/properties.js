@@ -1,0 +1,48 @@
+// 매물 카드 데이터 (작업지시서 §5.2, Claude 창작 · PDF 개념 연결)
+export const PROPERTY_LISTINGS = [
+  {
+    id: 'studio-old',
+    name: '낡은 원룸',
+    location: '변두리',
+    condition: '낮음',
+    price: 30_000_000,
+    volatility: 'low',
+    conceptTag: 'LTV',
+  },
+  {
+    id: 'multi-house',
+    name: '다세대주택',
+    location: '보통',
+    condition: '보통',
+    price: 60_000_000,
+    volatility: 'medium',
+    conceptTag: 'LTV',
+  },
+  {
+    id: 'flawed-shophouse',
+    name: '하자있는 상가주택',
+    location: '좋음',
+    condition: '낮음(하자)',
+    price: 80_000_000,
+    volatility: 'high',
+    conceptTag: 'LTV',
+  },
+  {
+    id: 'new-villa',
+    name: '신축 빌라',
+    location: '좋음',
+    condition: '좋음',
+    price: 120_000_000,
+    volatility: 'medium',
+    conceptTag: 'LTV',
+  },
+  {
+    id: 'station-apartment',
+    name: '역세권 구축 아파트',
+    location: '매우 좋음',
+    condition: '보통',
+    price: 150_000_000,
+    volatility: 'high',
+    conceptTag: 'LTV',
+  },
+]

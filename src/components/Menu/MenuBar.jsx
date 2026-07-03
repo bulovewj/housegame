@@ -7,14 +7,23 @@ const MENU_ITEMS = [
   { key: 'loan', label: '대출 확인' },
 ]
 
-function MenuBar() {
+function MenuBar({ enabledKeys = [], onSelect }) {
   return (
     <nav className="menu-bar">
-      {MENU_ITEMS.map((item) => (
-        <button key={item.key} type="button" className="menu-bar-button" disabled>
-          {item.label}
-        </button>
-      ))}
+      {MENU_ITEMS.map((item) => {
+        const enabled = enabledKeys.includes(item.key)
+        return (
+          <button
+            key={item.key}
+            type="button"
+            className="menu-bar-button"
+            disabled={!enabled}
+            onClick={() => enabled && onSelect(item.key)}
+          >
+            {item.label}
+          </button>
+        )
+      })}
     </nav>
   )
 }
