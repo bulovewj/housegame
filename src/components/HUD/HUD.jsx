@@ -1,8 +1,5 @@
+import { formatWon } from '../../game/format.js'
 import './HUD.css'
-
-function formatWon(amount) {
-  return `${Math.round(amount / 10_000).toLocaleString()}만원`
-}
 
 function HUD({ cash, netWorth, day, interestRate }) {
   return (

@@ -1,0 +1,48 @@
+.turn-summary-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.turn-summary-panel {
+  width: 280px;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.turn-summary-title {
+  margin: 0;
+  font-size: 16px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.turn-summary-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.turn-summary-list li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--color-text-dim);
+}
+
+.turn-summary-list li span:last-child {
+  color: var(--color-text);
+  font-weight: 700;
+}
