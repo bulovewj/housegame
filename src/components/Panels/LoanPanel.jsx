@@ -31,7 +31,7 @@ function LoanPanel({ properties, interestRate, cash, initialPropertyId, onRepay,
       <div className="panel-sheet">
         <div className="panel-header">
           <h2>대출 확인</h2>
-          <button type="button" className="panel-close" onClick={onClose}>
+          <button type="button" className="panel-close" aria-label="닫기" onClick={onClose}>
             ✕
           </button>
         </div>

@@ -9,7 +9,7 @@ function ConceptBookPanel({ onReplayTutorial, onClose }) {
       <div className="panel-sheet">
         <div className="panel-header">
           <h2>학습 노트</h2>
-          <button type="button" className="panel-close" onClick={onClose}>
+          <button type="button" className="panel-close" aria-label="닫기" onClick={onClose}>
             ✕
           </button>
         </div>

@@ -37,7 +37,7 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
       <div className="panel-sheet">
         <div className="panel-header">
           <h2>부동산 구매</h2>
-          <button type="button" className="panel-close" onClick={onClose}>
+          <button type="button" className="panel-close" aria-label="닫기" onClick={onClose}>
             ✕
           </button>
         </div>

@@ -153,6 +153,7 @@ function App() {
           <button
             type="button"
             className="app-topbar-button"
+            aria-label="학습 노트"
             onClick={() => setActivePanel('book')}
           >
             📖

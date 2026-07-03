@@ -16,7 +16,7 @@ function WorkPanel({ onComplete, onClose }) {
       <div className="panel-sheet">
         <div className="panel-header">
           <h2>일하기</h2>
-          <button type="button" className="panel-close" onClick={onClose}>
+          <button type="button" className="panel-close" aria-label="닫기" onClick={onClose}>
             ✕
           </button>
         </div>

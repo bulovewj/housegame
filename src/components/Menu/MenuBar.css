@@ -10,6 +10,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
+  min-height: 44px;
   padding: 10px 4px;
   border-radius: 8px;
   border: 2px solid var(--color-border);

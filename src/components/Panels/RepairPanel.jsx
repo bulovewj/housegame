@@ -14,7 +14,7 @@ function RepairPanel({ properties, cash, initialPropertyId, onRepair, onClose })
 
   return (
     <div className="panel-overlay"><div className="panel-sheet">
-      <div className="panel-header"><h2>건물 수리</h2><button type="button" className="panel-close" onClick={onClose}>✕</button></div>
+      <div className="panel-header"><h2>건물 수리</h2><button type="button" className="panel-close" aria-label="닫기" onClick={onClose}>✕</button></div>
       {!started && selected && <div className="repair-setup">
         <label htmlFor="repair-property">수리할 건물</label>
         <select id="repair-property" value={selectedId} onChange={(event) => setSelectedId(event.target.value)}>
