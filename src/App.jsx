@@ -10,14 +10,21 @@ import PurchasePanel from './components/Panels/PurchasePanel.jsx'
 import LoanPanel from './components/Panels/LoanPanel.jsx'
 import SellPanel from './components/Panels/SellPanel.jsx'
 import WorkPanel from './components/Panels/WorkPanel.jsx'
+import ConceptBookPanel from './components/Panels/ConceptBookPanel.jsx'
+import TutorialOverlay from './components/Tutorial/TutorialOverlay.jsx'
 import { saveGame, loadGame } from './save/storage.js'
 import './App.css'
+
+const TUTORIAL_SEEN_KEY = 'housegame:tutorialSeen'
 
 function App() {
   const [game, setGame] = useState(createInitialState)
   const [turnSummary, setTurnSummary] = useState(null)
   const [activePanel, setActivePanel] = useState(null)
   const [toast, setToast] = useState(null)
+  const [showTutorial, setShowTutorial] = useState(
+    () => localStorage.getItem(TUTORIAL_SEEN_KEY) !== 'true',
+  )
 
   function showToast(message) {
     setToast(message)
@@ -87,6 +94,11 @@ function App() {
     showToast('불러왔어요!')
   }
 
+  function finishTutorial() {
+    localStorage.setItem(TUTORIAL_SEEN_KEY, 'true')
+    setShowTutorial(false)
+  }
+
   const menuKeys = ['buy', 'sell', 'loan']
   if (!game.workedToday) menuKeys.push('work')
 
@@ -95,6 +107,13 @@ function App() {
       <header className="app-topbar">
         <h1 className="app-title">부동산 타이쿤</h1>
         <div className="app-topbar-actions">
+          <button
+            type="button"
+            className="app-topbar-button"
+            onClick={() => setActivePanel('book')}
+          >
+            📖
+          </button>
           <button type="button" className="app-topbar-button" onClick={handleSave}>
             저장
           </button>
@@ -146,6 +165,15 @@ function App() {
       {activePanel === 'work' && (
         <WorkPanel onComplete={handleWorkComplete} onClose={() => setActivePanel(null)} />
       )}
+      {activePanel === 'book' && (
+        <ConceptBookPanel
+          onReplayTutorial={() => {
+            setActivePanel(null)
+            setShowTutorial(true)
+          }}
+          onClose={() => setActivePanel(null)}
+        />
+      )}
       {turnSummary && (
         <TurnSummaryPanel
           day={game.day}
@@ -153,6 +181,7 @@ function App() {
           onClose={() => setTurnSummary(null)}
         />
       )}
+      {showTutorial && <TutorialOverlay onFinish={finishTutorial} />}
     </div>
   )
 }
