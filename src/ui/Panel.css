@@ -5,6 +5,7 @@
   display: flex;
   align-items: flex-end;
   z-index: 20;
+  animation: panel-fade-in 0.15s ease;
 }
 
 .panel-sheet {
@@ -18,6 +19,27 @@
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
+  animation: panel-slide-up 0.2s ease;
+}
+
+@keyframes panel-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes panel-slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .panel-header {

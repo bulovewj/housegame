@@ -67,6 +67,10 @@
   font-weight: 700;
 }
 
+.turn-summary-note--bailout {
+  border: 1px solid var(--color-danger);
+}
+
 .turn-summary-hint {
   color: var(--color-accent);
   font-size: 12px;

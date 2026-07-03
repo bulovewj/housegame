@@ -60,17 +60,31 @@ export function advanceTurn(state) {
   const nextDay = state.day + 1
   const nextRateEvent = nextDay % RATE_EVENT_INTERVAL === 0 ? drawRateEvent() : null
 
+  let cash = state.cash - interest + rentIncome
+  let bailout = 0
+  if (cash < 0) {
+    bailout = -cash
+    cash = 0
+  }
+
   const nextState = {
     ...state,
     day: nextDay,
-    cash: state.cash - interest + rentIncome,
+    cash,
     interestRate,
     properties,
     pendingRateEvent: nextRateEvent,
     workedToday: false,
   }
 
-  const summary = { interest, priceChangeTotal, rentIncome, rateChange, rateEvent: nextRateEvent }
+  const summary = {
+    interest,
+    priceChangeTotal,
+    rentIncome,
+    rateChange,
+    rateEvent: nextRateEvent,
+    bailout,
+  }
 
   return { nextState, summary }
 }

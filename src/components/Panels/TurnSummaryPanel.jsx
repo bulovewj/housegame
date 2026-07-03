@@ -3,7 +3,7 @@ import Button from '../../ui/Button.jsx'
 import './TurnSummaryPanel.css'
 
 function TurnSummaryPanel({ day, summary, onClose }) {
-  const { interest, priceChangeTotal, rentIncome, rateChange, rateEvent } = summary
+  const { interest, priceChangeTotal, rentIncome, rateChange, rateEvent, bailout } = summary
 
   return (
     <div className="turn-summary-overlay">
@@ -42,6 +42,13 @@ function TurnSummaryPanel({ day, summary, onClose }) {
             <p className="turn-summary-forecast-title">📰 {rateEvent.title}</p>
             <p>{rateEvent.description}</p>
             <p className="turn-summary-hint">다음 턴에 기준금리가 어떻게 될까요?</p>
+          </div>
+        )}
+
+        {bailout > 0 && (
+          <div className="turn-summary-note turn-summary-note--bailout">
+            <p>🚨 현금이 모자라서 긴급 구제금 {formatWon(bailout)}을 받았어요!</p>
+            <p className="turn-summary-hint">대출과 이자를 잘 관리해야 해요.</p>
           </div>
         )}
 
