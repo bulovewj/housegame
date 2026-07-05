@@ -28,6 +28,38 @@
   margin-top: 8px;
 }
 
+.loan-guide-text {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-text-dim);
+  line-height: 1.4;
+}
+
+.loan-preset-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.loan-preset-buttons button {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  min-height: 36px;
+  padding: 6px 4px;
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-dim);
+  cursor: pointer;
+}
+
+.loan-preset-buttons button.loan-preset-button--active {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
 .loan-slider-label {
   font-size: 13px;
   color: var(--color-text-dim);
@@ -79,5 +111,19 @@
 .loan-preview-warning {
   margin: 0;
   font-size: 12px;
+  color: var(--color-danger);
+}
+
+.loan-cashflow {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.loan-cashflow--ok {
+  color: var(--color-accent);
+}
+
+.loan-cashflow--warn {
   color: var(--color-danger);
 }

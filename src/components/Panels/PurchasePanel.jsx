@@ -22,9 +22,11 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
 
   const price = selected ? (market[selected.id] ?? selected.price) : 0
   const loanLimit = selected ? Math.floor((price * LTV_RATIO) / LOAN_STEP) * LOAN_STEP : 0
+  const halfLoan = Math.floor(loanLimit / 2 / LOAN_STEP) * LOAN_STEP
   const tax = Math.round(price * ACQUISITION_TAX_RATE)
   const cashNeeded = price - loanAmount + tax
   const previewInterest = calcInterest({ principal: loanAmount }, interestRate)
+  const expectedRent = selected ? calcRent(price) : 0
 
   function handleSelect(id) {
     setSelectedId(id)
@@ -97,6 +99,33 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
             </div>
 
             <div className="loan-slider-box">
+              <p className="loan-guide-text">
+                대출을 많이 받을수록 지금 쓸 현금은 아끼지만, 매턴 이자를 더 내야 해요.
+                감이 안 오면 아래 버튼으로 먼저 골라보세요.
+              </p>
+              <div className="loan-preset-buttons">
+                <button
+                  type="button"
+                  className={loanAmount === 0 ? 'loan-preset-button--active' : ''}
+                  onClick={() => setLoanAmount(0)}
+                >
+                  대출 없이
+                </button>
+                <button
+                  type="button"
+                  className={loanAmount === halfLoan ? 'loan-preset-button--active' : ''}
+                  onClick={() => setLoanAmount(halfLoan)}
+                >
+                  절반만
+                </button>
+                <button
+                  type="button"
+                  className={loanAmount === loanLimit ? 'loan-preset-button--active' : ''}
+                  onClick={() => setLoanAmount(loanLimit)}
+                >
+                  최대로
+                </button>
+              </div>
               <label className="loan-slider-label" htmlFor="loan-amount">
                 대출 금액: <strong>{formatWon(loanAmount)}</strong>
               </label>
@@ -133,6 +162,13 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
                   <span>{formatWon(previewInterest)}</span>
                 </li>
               </ul>
+              <p className={previewInterest <= expectedRent ? 'loan-cashflow loan-cashflow--ok' : 'loan-cashflow loan-cashflow--warn'}>
+                {loanAmount === 0
+                  ? '대출이 없어서 이자 걱정 없이 월세를 그대로 모을 수 있어요.'
+                  : previewInterest <= expectedRent
+                    ? `월세(${formatWon(expectedRent)})로 이자(${formatWon(previewInterest)})를 감당할 수 있어요 👍`
+                    : `이자(${formatWon(previewInterest)})가 월세(${formatWon(expectedRent)})보다 많아요! 다른 현금으로 메꿔야 해요 ⚠️`}
+              </p>
               {cash < cashNeeded && (
                 <p className="loan-preview-warning">현금이 부족해요! 대출을 더 받아보세요.</p>
               )}
