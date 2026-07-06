@@ -9,6 +9,7 @@ import {
 import { calcInterest, calcRent, calcMaintenance } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
+import { BuildingSprite } from '../Map/BuildingSprites.jsx'
 import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './PurchasePanel.css'
@@ -55,13 +56,18 @@ function PurchasePanel({ ownedIds, cash, market, interestRate, onPurchase, onClo
                     className="property-list-item"
                     onClick={() => handleSelect(p.id)}
                   >
-                    <span className="property-name">{p.name}</span>
-                    <span className="property-meta">
-                      {p.location} · {p.condition}
+                    <span className="property-list-item-sprite">
+                      <BuildingSprite propertyId={p.id} size={48} />
                     </span>
-                    <span className="property-price">{formatWon(marketPrice)}</span>
-                    <span className="property-rent">
-                      월세 {formatWon(calcRent(marketPrice))}/턴
+                    <span className="property-list-item-info">
+                      <span className="property-name">{p.name}</span>
+                      <span className="property-meta">
+                        {p.location} · {p.condition}
+                      </span>
+                      <span className="property-price">{formatWon(marketPrice)}</span>
+                      <span className="property-rent">
+                        월세 {formatWon(calcRent(marketPrice))}/턴
+                      </span>
                     </span>
                   </button>
                 </li>

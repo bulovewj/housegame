@@ -159,17 +159,17 @@ function App() {
             📖
           </button>
           <button type="button" className="app-topbar-button" onClick={handleSave}>
-            저장
+            💾 저장
           </button>
           <button type="button" className="app-topbar-button" onClick={handleLoad}>
-            불러오기
+            📂 불러오기
           </button>
           <button
             type="button"
             className="app-topbar-button app-topbar-button--accent"
             onClick={handleNextDay}
           >
-            다음날
+            ☀️ 다음날
           </button>
         </div>
       </header>

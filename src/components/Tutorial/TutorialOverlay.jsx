@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TUTORIAL_STEPS } from '../../data/tutorialSteps.js'
 import Button from '../../ui/Button.jsx'
+import FoxSprite from './FoxSprite.jsx'
 import './TutorialOverlay.css'
 
 function TutorialOverlay({ onFinish }) {
@@ -24,7 +25,9 @@ function TutorialOverlay({ onFinish }) {
         ))}
       </div>
       <div className="tutorial-card">
-        <span className="tutorial-mascot">🦊</span>
+        <div className="tutorial-mascot">
+          <FoxSprite size={96} expr={step.expr ?? 'happy'} />
+        </div>
         <p className="tutorial-text">{step.text}</p>
         <div className="tutorial-actions">
           <button type="button" className="tutorial-skip" onClick={onFinish}>

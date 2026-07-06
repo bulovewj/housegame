@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { calcRent } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
 import ConceptTooltip from '../Tooltip/ConceptTooltip.jsx'
+import { BuildingSprite } from '../Map/BuildingSprites.jsx'
 import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './SellPanel.css'
@@ -35,12 +36,17 @@ function SellPanel({ properties, initialPropertyId, onSell, onClose }) {
                   className="property-list-item"
                   onClick={() => setSelectedIndex(index)}
                 >
-                  <span className="property-name">{p.name}</span>
-                  <span className="property-meta">
-                    {p.location} · {p.condition}
+                  <span className="property-list-item-sprite">
+                    <BuildingSprite propertyId={p.id} size={48} />
                   </span>
-                  <span className="property-price">{formatWon(p.price)}</span>
-                  <span className="property-rent">월세 {formatWon(calcRent(p.price))}/턴</span>
+                  <span className="property-list-item-info">
+                    <span className="property-name">{p.name}</span>
+                    <span className="property-meta">
+                      {p.location} · {p.condition}
+                    </span>
+                    <span className="property-price">{formatWon(p.price)}</span>
+                    <span className="property-rent">월세 {formatWon(calcRent(p.price))}/턴</span>
+                  </span>
                 </button>
               </li>
             ))}

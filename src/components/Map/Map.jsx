@@ -1,3 +1,4 @@
+import { BuildingSprite } from './BuildingSprites.jsx'
 import './Map.css'
 
 function Map({ properties, onManage }) {
@@ -12,7 +13,10 @@ function Map({ properties, onManage }) {
             title={`${property.name} · ${property.regionTrait}`}
             onClick={() => onManage(property.id)}
           >
-            <span>{property.name}</span>
+            <span className="game-map-house-sprite">
+              <BuildingSprite propertyId={property.id} size={72} />
+            </span>
+            <span className="game-map-house-label">{property.name}</span>
           </button>
         ))}
       </div>

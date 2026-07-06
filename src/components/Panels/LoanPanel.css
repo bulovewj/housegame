@@ -11,7 +11,8 @@
   display: flex;
   justify-content: space-between;
   background: var(--color-surface-soft);
-  border-radius: 10px;
+  border: var(--outline-thin);
+  border-radius: var(--radius);
   padding: 10px 12px;
   font-size: 14px;
   color: var(--color-text-dim);
@@ -25,7 +26,7 @@
 .loan-hint {
   margin: 0;
   font-size: 12px;
-  color: var(--color-accent);
+  color: var(--color-cash);
 }
 
 .loan-empty {
@@ -48,10 +49,11 @@
 .loan-repayment select {
   width: 100%;
   padding: 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  background: var(--color-surface-soft);
+  border: var(--outline);
+  border-radius: var(--radius);
+  background: var(--color-surface);
   color: var(--color-text);
+  font-family: var(--font-body);
 }
 
 .loan-repayment-actions {
@@ -62,6 +64,7 @@
 .loan-repayment-actions button {
   border: 0;
   background: transparent;
-  color: var(--color-accent);
+  color: var(--color-cash);
+  font-weight: 700;
   cursor: pointer;
 }

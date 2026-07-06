@@ -1,6 +1,7 @@
 .repair-setup { display:flex; flex-direction:column; gap:12px; }
 .repair-setup label { color:var(--color-text-dim); font-size:13px; }
-.repair-setup select,.repair-setup button { padding:10px; border:1px solid var(--color-border); border-radius:8px; }
-.repair-setup select { background:var(--color-surface-soft); color:var(--color-text); }
-.repair-setup button { background:var(--color-accent); color:white; font-weight:700; }
-.repair-setup button:disabled { opacity:.5; }
+.repair-setup select,.repair-setup button { padding:10px; border: var(--outline); border-radius: var(--radius); font-family: var(--font-body); }
+.repair-setup select { background:var(--color-surface); color:var(--color-text); }
+.repair-setup button { background:var(--color-accent); color:var(--color-text); font-weight:700; box-shadow: var(--shadow-hard); cursor: pointer; }
+.repair-setup button:active:not(:disabled) { transform: translate(1px, 1px); box-shadow: var(--shadow-hard-sm); }
+.repair-setup button:disabled { background: #f0f0f0; border-color: #aaa; box-shadow: none; opacity:.55; cursor: not-allowed; }

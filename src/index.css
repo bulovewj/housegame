@@ -1,19 +1,29 @@
+@import url('https://cdn.jsdelivr.net/npm/galmuri/dist/galmuri.css');
+
 :root {
-  --color-bg: #1a1522;
-  --color-surface: #2b2438;
-  --color-surface-soft: #372e47;
-  --color-text: #f5f2fa;
-  --color-text-dim: #b6acc4;
-  --color-accent: #5ec9a3;
-  --color-accent-soft: rgba(94, 201, 163, 0.16);
-  --color-cash: #f2c94c;
-  --color-danger: #e2685f;
-  --color-border: #4a3f5c;
+  --color-bg: #bdeeff;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fff8e0;
+  --color-text: #3a3a3a;
+  --color-text-dim: #717182;
+  --color-accent: #ffd93d;
+  --color-accent-soft: #fffde8;
+  --color-cash: #ffb800;
+  --color-danger: #ff6b6b;
+  --color-border: #000000;
 
-  --font-pixel: 'Courier New', ui-monospace, monospace;
-  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-pixel: 'Galmuri11', 'DotGothic16', ui-monospace, monospace;
+  --font-body: 'Galmuri11', 'DotGothic16', ui-monospace, monospace;
 
-  color-scheme: dark;
+  --radius: 0px;
+  --radius-sheet: 16px;
+  --outline: 2px solid var(--color-border);
+  --outline-thin: 1.5px solid var(--color-border);
+  --shadow-hard: 2px 2px 0 #000;
+  --shadow-hard-sm: 1px 1px 0 #000;
+  --shadow-hard-lg: 3px 3px 0 #000;
+
+  color-scheme: light;
   color: var(--color-text);
   background: var(--color-bg);
   font-synthesis: none;

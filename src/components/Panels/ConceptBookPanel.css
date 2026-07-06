@@ -9,7 +9,8 @@
 
 .concept-card {
   background: var(--color-surface-soft);
-  border-radius: 10px;
+  border: var(--outline-thin);
+  border-radius: var(--radius);
   padding: 12px;
 }
 

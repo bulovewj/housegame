@@ -1,6 +1,7 @@
 .ltv-box {
   background: var(--color-surface-soft);
-  border-radius: 10px;
+  border: var(--outline-thin);
+  border-radius: var(--radius);
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
@@ -20,7 +21,8 @@
 
 .loan-slider-box {
   background: var(--color-surface-soft);
-  border-radius: 10px;
+  border: var(--outline-thin);
+  border-radius: var(--radius);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -44,20 +46,20 @@
   flex: 1;
   font-family: var(--font-body);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   min-height: 36px;
   padding: 6px 4px;
-  border-radius: 8px;
-  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  border: var(--outline);
+  box-shadow: var(--shadow-hard-sm);
   background: var(--color-surface);
   color: var(--color-text-dim);
   cursor: pointer;
 }
 
 .loan-preset-buttons button.loan-preset-button--active {
-  border-color: var(--color-accent);
-  background: var(--color-accent-soft);
-  color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-text);
 }
 
 .loan-slider-label {
@@ -86,7 +88,7 @@
   list-style: none;
   margin: 4px 0 0;
   padding: 8px 0 0;
-  border-top: 1px solid var(--color-border);
+  border-top: 1.5px dashed rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -104,8 +106,8 @@
   font-weight: 700;
 }
 
-.loan-preview-short {
-  color: var(--color-danger) !important;
+.loan-preview li span.loan-preview-short {
+  color: var(--color-danger);
 }
 
 .loan-preview-warning {
@@ -121,7 +123,7 @@
 }
 
 .loan-cashflow--ok {
-  color: var(--color-accent);
+  color: var(--color-cash);
 }
 
 .loan-cashflow--warn {

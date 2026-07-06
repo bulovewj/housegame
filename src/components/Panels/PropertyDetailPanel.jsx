@@ -1,5 +1,6 @@
 import { calcRent, calcMaintenance } from '../../game/engine.js'
 import { formatWon } from '../../game/format.js'
+import { BuildingSprite } from '../Map/BuildingSprites.jsx'
 import Button from '../../ui/Button.jsx'
 import '../../ui/Panel.css'
 import './PropertyDetailPanel.css'
@@ -21,10 +22,17 @@ function PropertyDetailPanel({ property, onRepair, onRepay, onSell, onClose }) {
           </button>
         </div>
 
-        <p className="property-meta">
-          {property.location} · {property.condition}
-        </p>
-        <p className="property-region-trait">{property.regionTrait}</p>
+        <div className="property-detail-header">
+          <span className="property-detail-sprite">
+            <BuildingSprite propertyId={property.id} size={56} />
+          </span>
+          <div>
+            <p className="property-meta">
+              {property.location} · {property.condition}
+            </p>
+            <p className="property-region-trait">{property.regionTrait}</p>
+          </div>
+        </div>
 
         <ul className="detail-info-list">
           <li>

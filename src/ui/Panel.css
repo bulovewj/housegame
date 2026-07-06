@@ -1,7 +1,7 @@
 .panel-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.38);
   display: flex;
   align-items: flex-end;
   z-index: 20;
@@ -9,17 +9,32 @@
 }
 
 .panel-sheet {
+  position: relative;
   width: 100%;
   max-height: 85%;
   background: var(--color-surface);
-  border-top: 2px solid var(--color-border);
-  border-radius: 16px 16px 0 0;
-  padding: 16px;
+  border: var(--outline);
+  border-bottom: none;
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  box-shadow: 0 -4px 0 #000;
+  padding: 28px 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
   animation: panel-slide-up 0.2s ease;
+}
+
+.panel-sheet::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 4px;
+  background: #d0d0d0;
+  border: 1.5px solid #b0b0b0;
 }
 
 @keyframes panel-fade-in {
@@ -60,11 +75,19 @@
   justify-content: center;
   min-width: 40px;
   min-height: 40px;
-  background: none;
-  border: none;
-  color: var(--color-text-dim);
-  font-size: 18px;
+  background: var(--color-surface);
+  border: var(--outline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
+  color: var(--color-text);
+  font-size: 16px;
   cursor: pointer;
+  transition: transform 0.05s ease;
+}
+
+.panel-close:active {
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-hard-sm);
 }
 
 .property-list {
@@ -79,15 +102,43 @@
 .property-list-item {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  background: var(--color-surface-soft);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-surface);
+  border: var(--outline-thin);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-hard);
   padding: 10px 12px;
   cursor: pointer;
   text-align: left;
+  transition: transform 0.05s ease;
+}
+
+.property-list-item:active {
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.property-list-item-sprite {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--color-bg);
+  border: var(--outline-thin);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.property-list-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .property-empty {
@@ -116,7 +167,7 @@
 
 .property-rent {
   font-size: 11px;
-  color: var(--color-accent);
+  color: var(--color-cash);
 }
 
 .property-maintenance {

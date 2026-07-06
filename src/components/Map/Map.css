@@ -2,28 +2,15 @@
   position: relative;
   flex: 1;
   margin: 8px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   overflow: hidden;
-  border: 2px solid var(--color-border);
-  background-color: #8fc46a;
-  background-image: linear-gradient(
-      45deg,
-      #7fb75c 25%,
-      transparent 25%,
-      transparent 75%,
-      #7fb75c 75%,
-      #7fb75c
-    ),
-    linear-gradient(
-      45deg,
-      #7fb75c 25%,
-      transparent 25%,
-      transparent 75%,
-      #7fb75c 75%,
-      #7fb75c
-    );
-  background-size: 56px 56px;
-  background-position: 0 0, 28px 28px;
+  border: var(--outline);
+  box-shadow: var(--shadow-hard);
+  background-color: #8dc65a;
+  background-image: radial-gradient(circle, #78b048 1.5px, transparent 1.5px),
+    radial-gradient(circle, #9ed468 1px, transparent 1px);
+  background-size: 12px 12px, 6px 6px;
+  background-position: 0 0, 3px 3px;
 }
 
 .game-map-grid {
@@ -40,13 +27,60 @@
 
 .game-map-house {
   position: relative;
-  width: 72px;
+  width: 88px;
   max-width: 100%;
-  aspect-ratio: 1;
-  background: var(--color-cash);
-  border: 2px solid var(--color-border);
-  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
 }
-.game-map-house span { position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%); width:90px; font-size:10px; color:var(--color-text); text-shadow:0 1px white; }
-.game-map-empty { position:absolute; inset:0; display:grid; place-items:center; margin:0; color:#31592b; font-weight:700; }
+
+.game-map-house-sprite {
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 88px;
+  background: var(--color-surface);
+  border: var(--outline);
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.05s ease;
+}
+
+.game-map-house:active .game-map-house-sprite {
+  transform: translate(1px, 1px);
+  box-shadow: var(--shadow-hard-sm);
+}
+
+.game-map-house-label {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: var(--outline-thin);
+  border-top: none;
+  padding: 2px 2px;
+  font-size: 9px;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.game-map-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0 24px;
+  text-align: center;
+  color: #2f4d1e;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}

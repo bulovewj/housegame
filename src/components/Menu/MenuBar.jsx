@@ -1,10 +1,10 @@
 import './MenuBar.css'
 
 const MENU_ITEMS = [
-  { key: 'buy', label: '부동산 구매' },
-  { key: 'sell', label: '부동산 판매' },
-  { key: 'work', label: '일하기' },
-  { key: 'loan', label: '대출 확인' },
+  { key: 'buy', label: '구매', icon: '🏠' },
+  { key: 'sell', label: '판매', icon: '💰' },
+  { key: 'work', label: '일하기', icon: '💼' },
+  { key: 'loan', label: '대출', icon: '🏦' },
 ]
 
 function MenuBar({ enabledKeys = [], onSelect }) {
@@ -20,7 +20,8 @@ function MenuBar({ enabledKeys = [], onSelect }) {
             disabled={!enabled}
             onClick={() => enabled && onSelect(item.key)}
           >
-            {item.label}
+            <span className="menu-bar-icon">{item.icon}</span>
+            <span>{item.label}</span>
           </button>
         )
       })}

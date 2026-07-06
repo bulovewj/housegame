@@ -1,4 +1,6 @@
-.season-goals { margin:0 16px 4px; padding:7px 10px; border:1px solid var(--color-border); border-radius:8px; background:var(--color-surface-soft); font-size:12px; }
-.season-goals summary { cursor:pointer; font-weight:700; }
-.season-goals ul { margin:8px 0 0; padding-left:20px; color:var(--color-text-dim); }
-.season-goals .done { color:var(--color-accent); text-decoration:line-through; }
+.season-goals { margin:0; padding:0 10px; border-top: var(--outline); border-bottom: var(--outline); background:var(--color-surface); font-size:12px; }
+.season-goals summary { cursor:pointer; font-weight:700; padding: 8px 0; list-style: none; }
+.season-goals summary::-webkit-details-marker { display: none; }
+.season-goals ul { margin:0; padding: 0 0 10px 4px; list-style: none; color:var(--color-text-dim); display: flex; flex-direction: column; gap: 4px; }
+.season-goals li { padding: 4px 8px; background: var(--color-accent-soft); border: var(--outline-thin); }
+.season-goals .done { color: var(--color-cash); font-weight: 700; text-decoration:line-through; }
